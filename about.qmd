@@ -1,0 +1,16 @@
+---
+title: "About"
+image: 345455360_203213172570034_8008185320897726121_n.jpg
+about:
+  template: jolla
+  links:
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/mitchell-urbain/
+    - icon: github
+      text: Github
+      href: https://github.com/urbainm
+
+---
+
+This blog is an assignment for Data Science 3 at Des Moines Area Community College.

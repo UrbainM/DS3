@@ -199,8 +199,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Intro</h1>
 <p>I will be setting up a low-spec local cloud (edge) cluster with persistent storage on some 2012 audio/visual mini PCs I picked up at a school auction.</p>
 <p>When starting off with edge computing, it is easiest when all the computers match, but the goal is to eventually plug any computer into our junkheap and add its compute to the pool. Then it becomes a matter of weighing power consumption vs.&nbsp;processing efficiency to determine if adding a <code>node</code> is worth the effort.</p>
-<p>One of our nodes will be the papa bear (control plane node) and the rest will be the baby bears (worker nodes).<br>
-<em>Don’t worry about what they were called before.</em></p>
+<p>One of our nodes will be the papa bear (control plane node) and the rest will be the baby bears (worker nodes).</p>
 <p>It is a good idea to eventually set up a redundant control plane node, but for now this is unnecessary.</p>
 <blockquote class="blockquote">
 <p><strong>Note:</strong> Expect barricades. Things will not work, and you will have to fix them.</p>
@@ -251,15 +250,15 @@ Make space in your router’s DHCP assignments for your nodes.</p>
 </section>
 <section id="kubernetes" class="level1">
 <h1>Kubernetes</h1>
-<p>My Kubernetes of choice is k3s, which is more lightweight than k8s, but this means I will have to use Rancher to lasso my nodes. I also get to pretend I’m a cowboy Yeehaw. Install k3s on your control-plane node first, this is a binary which will just spin up and override the hypervisor in 3 seconds:</p>
+<p>My Kubernetes of choice is k3s, which is more lightweight than k8s, but this means I will have to use Rancher to lasso my nodes. Install k3s on your control-plane node first, this is a binary which will just spin up and override the hypervisor in 3 seconds:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-sfL</span> https://get.k3s.io <span class="kw">|</span> <span class="fu">sh</span> <span class="at">-s</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Save the output of this to a file labeled “k3s token:” so each worker is installed to the controller:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> cat /var/lib/rancher/k3s/server/node-token</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Now in the same file simplify your command by replacing the ip and token in this and save again for ease:</p>
+<p>You can also simplify a long command by doing this.   echo your long kubernetes commands with something like "k".</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-sfL</span> https://get.k3s.io <span class="kw">|</span> <span class="va">K3S_URL</span><span class="op">=</span><span class="st">"https://&lt;PAPABEAR_IP&gt;:6443"</span> <span class="va">K3S_TOKEN</span><span class="op">=</span><span class="st">"&lt;NODE_TOKEN&gt;"</span> <span class="fu">sh</span> –</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Now you can paste that command into each worker.</p>
 <p><img src="getnodes.png" class="img-fluid"></p>
-<p>Well, well, well. Would you look at that. Let’s run a test pod in Docker to get started on load-balancing our nodes. From now on you will only be working with the control-plane unless you need to resolve networking issues / port forwarding / you may become well acquainted with /etc/resolve.conf.</p>
+<p>Well, well, well. Let’s run a test pod in Docker to get started on load-balancing our nodes. From now on you will only be working with the control-plane unless you need to resolve networking issues / port forwarding / you may become well acquainted with /etc/resolve.conf.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> run test <span class="at">--image</span><span class="op">=</span>nginx</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get pods <span class="at">-o</span> wide</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>PapaBear has delegated this task to worker1, it is pulling the image, and containerizing it, and then eventually running the pod which we will connect to by exposing a port:</p>
@@ -267,7 +266,7 @@ Make space in your router’s DHCP assignments for your nodes.</p>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> get svc test <span class="at">-o</span> wide</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Take note of the TCP port after 80 Connect to that port in your browser: http://ip.add.ress.#:<port> and you will see the app being hosted by the delegated worker.</port></p>
 <p><img src="nginx.png" class="img-fluid"></p>
-<p>From here out you’re free to play with whatever cloud apps you can and explore the metadata of Kubernetes systems. Part 2 will detail how to set up Raid 5 Persistent S3 Object Storage on the spare hard-drive partition.</p>
+<p>From here out you’re free to play with whatever cloud apps you can. Part 2 will detail how to set up Raid 5 Persistent S3 Object Storage on the spare hard-drive partition.</p>
 
 
 </section>

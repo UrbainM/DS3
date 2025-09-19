@@ -545,6 +545,11 @@ center_label
 <span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> epoch <span class="op">%</span> <span class="dv">10</span> <span class="op">==</span> <span class="dv">0</span>:</span>
 <span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f'Epoch: </span><span class="sc">{</span>epoch<span class="sc">:03d}</span><span class="ss">, Loss: </span><span class="sc">{</span>loss<span class="sc">:.4f}</span><span class="ss">'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
+
+<p>You may be wondering what the next cell actually shows us, and what we have been making this whole time.  The next cell shows us our model's training results as measured in terms of incorrect predictions.</p>
+<p>On the 300th epoch of training our model was able to 93% accurately predict which type of intrusion is happening based on unlabled incoming data.</p>
+<p>This means our model not only detects an intrusion, but correctly identifies the type as well.</p>
+  
 <pre><code>Using device: cuda
 Epoch: 010, Loss: 0.4410
 Epoch: 020, Loss: 0.2906
